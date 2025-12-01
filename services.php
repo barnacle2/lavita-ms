@@ -19,18 +19,7 @@ if ($inventory_result) {
     }
 }
 
-// --- 2. Fetch Individual Services for Packages ---
-$individual_services_result = $conn->query("SELECT id, service_name, service_price FROM services WHERE service_type = 'individual' ORDER BY service_name ASC");
-$individual_services = [];
-$service_name_map = []; 
-if ($individual_services_result) {
-    while ($row = $individual_services_result->fetch_assoc()) {
-        $individual_services[] = $row;
-        $service_name_map[$row['id']] = $row['service_name']; 
-    }
-}
-
-// --- 3. Handle CRUD operations ---
+// --- 2. Handle CRUD operations ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_service']) || isset($_POST['add_package'])) {
         $service_name = $_POST['service_name'];
@@ -193,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// --- 4. Fetch all services (Joined with Inventory for display) ---
+// --- 3. Fetch all services (Joined with Inventory for display) ---
 $query = "
     SELECT s.*, i.item_name as inv_name, i.unit_type, i.stock_quantity 
     FROM services s 
@@ -234,6 +223,17 @@ if ($bindListRes) {
         $bindingsByService[$sid][] = $b;
     }
     $bindListRes->close();
+}
+
+// --- 4. Fetch Individual Services for Packages (must run after CRUD so new services appear immediately) ---
+$individual_services_result = $conn->query("SELECT id, service_name, service_price FROM services WHERE service_type = 'individual' ORDER BY service_name ASC");
+$individual_services = [];
+$service_name_map = [];
+if ($individual_services_result) {
+    while ($row = $individual_services_result->fetch_assoc()) {
+        $individual_services[] = $row;
+        $service_name_map[$row['id']] = $row['service_name'];
+    }
 }
 ?>
 
