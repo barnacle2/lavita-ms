@@ -1,0 +1,2204 @@
+/*
+ * This CSS file provides the styling for the clinic management system.
+ * It sets up the main layout and styles the components to match a professional design.
+ */
+
+/* Main layout structure */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    margin-left: 250px;
+    margin-top: 60px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Services page specific styles */
+.services-page .main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 60px 0 0 250px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.services-page .card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+    height: 100%;
+}
+
+.services-page .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 20px;
+}
+
+.services-page .service-form-card {
+    margin-bottom: 30px;
+    padding: 28px;
+    border: 1px solid #7ed07e;
+    border-radius: 12px;
+    background-color: #e6f8e9;
+    box-shadow: 0 2px 8px rgba(126, 208, 126, 0.18);
+}
+
+.services-page .service-form-header h4 {
+    margin: 0 0 20px;
+    color: #28a745;
+    font-weight: 600;
+}
+
+.services-page .service-form-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.services-page .service-info-column {
+    flex: 1 1 65%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.services-page .inventory-panel {
+    flex: 0 0 34%;
+    max-width: 34%;
+    background-color: #fff;
+    border: 1px solid #5a5a5a;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 100%;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+}
+
+.services-page .inventory-panel-header h5 {
+    margin: 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.services-page .inventory-panel-header p {
+    margin: 6px 0 0;
+    color: #6b6b6b;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 992px) {
+    .services-page .service-form-grid {
+        flex-wrap: wrap;
+    }
+    .services-page .service-info-column,
+    .services-page .inventory-panel {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .services-page .package-form-grid {
+        flex-wrap: wrap;
+    }
+    .services-page .package-form-column,
+    .services-page .package-services-panel {
+        flex: 1 1 100%;
+    }
+}
+
+.services-page .service-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.services-page .service-form-field label {
+    font-weight: 600;
+    color: #262626;
+    font-size: 0.95rem;
+}
+
+.services-page .service-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #5a5a5a;
+    border-radius: 12px;
+    background-color: #fff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.services-page .service-input:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.15);
+}
+
+.services-page .service-textarea {
+    min-height: 120px;
+    resize: none;
+}
+
+.services-page .service-form-actions {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.services-page .service-submit-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.services-page .service-submit-btn:hover {
+    background-color: #1e7f34;
+}
+
+.services-page .service-cancel-link {
+    color: #c0392b;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.services-page .service-cancel-link:hover {
+    text-decoration: underline;
+}
+
+.services-page .services-list-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+}
+
+.services-page .services-list-header h4 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.services-page .services-search-input {
+    flex: 1 1 280px;
+    max-width: 340px;
+    padding: 10px 16px;
+    border: 1px solid #bfc4d1;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    background-color: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.services-page .services-search-input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
+.services-page .package-form-card {
+    margin-bottom: 40px;
+    padding: 26px;
+    border: 1px solid #7eb1ff;
+    border-radius: 12px;
+    background-color: #e8f1ff;
+    box-shadow: 0 2px 8px rgba(126, 177, 255, 0.18);
+}
+
+.services-page .package-form-header h4 {
+    margin: 0 0 18px;
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.services-page .package-form-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.services-page .package-form-column,
+.services-page .package-services-panel {
+    flex: 1 1 50%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.services-page .package-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.services-page .package-form-field label,
+.services-page .package-services-panel label {
+    font-weight: 600;
+    color: #262626;
+    margin: 0;
+}
+
+.services-page .package-services-panel label {
+    margin-bottom: 6px;
+}
+
+.services-page .package-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #5a5a5a;
+    border-radius: 12px;
+    background-color: #fff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.services-page .package-input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
+.services-page .package-services-list {
+    height: 150px;
+    overflow-y: auto;
+    border: 1px solid #5a5a5a;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background-color: #fff;
+}
+
+.services-page .package-form-actions {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.services-page .package-submit-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.services-page .package-submit-btn:hover {
+    background-color: #0062cc;
+}
+
+.services-page .package-cancel-link {
+    color: #c0392b;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.services-page .package-cancel-link:hover {
+    text-decoration: underline;
+}
+
+.patients-page .patient-form-panel {
+    margin-bottom: 30px;
+    padding: 28px;
+    border: 1px solid #7eb1ff;
+    border-radius: 12px;
+    background-color: #e8f1ff;
+    box-shadow: 0 2px 8px rgba(126, 177, 255, 0.15);
+}
+
+.patients-page .card {
+    margin-top: 20px;
+}
+
+.patients-page .card-body {
+    padding: 20px 24px;
+}
+
+.patients-page .patient-form-title {
+    margin: 0 0 18px;
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.patients-page .patient-form-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 20px;
+}
+
+.patients-page .patient-form-group {
+    flex: 1 1 calc(50% - 10px);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.patients-page .patient-form-group.full-width {
+    flex: 1 1 100%;
+}
+
+.patients-page .patient-form-label {
+    font-weight: 600;
+    color: #262626;
+    font-size: 0.95rem;
+}
+
+.patients-page .patient-form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #5a5a5a;
+    border-radius: 12px;
+    background-color: #fff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.patients-page .patient-form-control:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
+.patients-page .patient-form-actions {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.patients-page .patient-primary-btn {
+    background-color: #0d6efd;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.patients-page .patient-primary-btn:hover {
+    background-color: #0b5ed7;
+}
+
+.patients-page .patient-cancel-link {
+    color: #ffffff;
+    background-color: #c0392b;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 26px;
+    border: 1px solid #c0392b;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.patients-page .patient-cancel-link:hover {
+    background-color: #e74c3c;
+    text-decoration: none;
+}
+
+.transactions-page .card {
+    margin-top: 20px;
+}
+
+.transactions-page .billing-form-panel {
+    margin-bottom: 30px;
+    padding: 28px;
+    border: 1px solid #c8d6f3;
+    border-radius: 14px;
+    background-color: #f2f6ff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.transactions-page .billing-form-title {
+    margin: 0 0 12px;
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.transactions-page .billing-form-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 20px;
+}
+
+.transactions-page .billing-field {
+    flex: 1 1 calc(50% - 10px);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.transactions-page .billing-field.full-width {
+    flex: 1 1 100%;
+}
+
+.transactions-page .billing-label {
+    font-weight: 600;
+    color: #262626;
+    font-size: 0.95rem;
+}
+
+.transactions-page .billing-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #5a5a5a;
+    border-radius: 12px;
+    background-color: #fff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.transactions-page .billing-input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
+.transactions-page .billing-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.transactions-page .billing-dynamic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.transactions-page .billing-dynamic-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.transactions-page .billing-select {
+    flex: 1 1 auto;
+}
+
+.transactions-page .billing-remove-btn {
+    background-color: #f05b5b;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.transactions-page .billing-remove-btn:hover {
+    background-color: #d94a4a;
+}
+
+.transactions-page .billing-add-btn {
+    align-self: flex-start;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.transactions-page .billing-add-btn:hover {
+    background-color: #1f7f36;
+}
+
+.transactions-page .billing-discount-grid {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 20px;
+}
+
+.transactions-page .billing-total-display {
+    color: #28a745;
+    font-weight: 700;
+    background-color: #fff;
+}
+
+.transactions-page .billing-actions {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.transactions-page .billing-primary-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.transactions-page .billing-primary-btn:hover {
+    background-color: #0062cc;
+}
+
+.transactions-page .billing-secondary-btn {
+    color: #ffffff;
+    background-color: #dc3545;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 8px 26px;
+    border: 1px solid #dc3545;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.transactions-page .billing-secondary-btn:hover {
+    background-color: #e4606d;
+    color: #ffffff;
+}
+
+.transactions-page .transactions-toggle {
+    margin: 30px 0 40px;
+}
+
+.transactions-page .transactions-toggle-btn {
+    background-color: #17a2b8;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.transactions-page .transactions-toggle-btn:hover {
+    background-color: #138a9b;
+}
+
+.transactions-page .transactions-table-wrapper {
+    margin-top: 20px;
+    border: 1px solid #dfe4ef;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.transactions-page .transactions-table-title {
+    margin: 0;
+    font-weight: 600;
+}
+
+.transactions-page .transactions-table-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.transactions-page .transactions-search-input {
+    flex: 1 1 280px;
+    max-width: 340px;
+    padding: 10px 16px;
+    border: 1px solid #c7ccda;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.transactions-page .transactions-search-input:focus {
+    outline: none;
+    border-color: #17a2b8;
+    box-shadow: 0 0 0 2px rgba(23, 162, 184, 0.15);
+}
+
+.transactions-page .transactions-table-wrapper .data-table th,
+.transactions-page .transactions-table-wrapper .data-table td {
+    padding: 12px;
+}
+
+@media (max-width: 768px) {
+    .patients-page .patient-form-group,
+    .transactions-page .billing-field {
+        flex: 1 1 100%;
+    }
+
+    .transactions-page .billing-dynamic-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .transactions-page .billing-remove-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .transactions-page .billing-add-btn,
+    .transactions-page .billing-primary-btn,
+    .transactions-page .billing-secondary-btn,
+    .transactions-page .transactions-toggle-btn,
+    .transactions-page .transactions-search-input {
+        width: 100%;
+        text-align: center;
+    }
+
+    .patients-page .patients-search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .patients-page .patients-search-btn,
+    .patients-page .patients-clear-btn {
+        width: 100%;
+    }
+}
+
+.patients-page .patients-search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 10px 0 15px;
+}
+
+.patients-page .patients-search-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #bfc4d1;
+    border-radius: 10px;
+}
+
+.patients-page .patients-search-btn,
+.patients-page .patients-clear-btn {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+}
+.patients-page .patients-clear-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.patients-page .patients-search-btn {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.patients-page .patients-clear-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #d0d5e0;
+    text-decoration: none;
+}
+
+.patients-page .table-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.patients-page table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.patients-page th,
+.patients-page td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.patients-page thead {
+    background-color: #f8f9fa;
+}
+
+.patients-page tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+@media (max-width: 768px) {
+    .patients-page .patient-form-group {
+        flex: 1 1 100%;
+    }
+
+    .patients-page .patients-search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .patients-page .patients-search-btn,
+    .patients-page .patients-clear-btn {
+        width: 100%;
+    }
+}
+
+.services-page .table-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.services-page table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.services-page thead {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 10;
+}
+
+.services-page th,
+.services-page td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.services-page tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* General and Body styling */
+html {
+    height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef1f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Removed duplicate body rule */
+
+/* Fixed header and navigation */
+.main-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    z-index: 1001;
+    overflow-y: auto;
+    background-color: #2b3035;
+    color: #fff;
+    transition: transform 0.3s ease, width 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-section {
+    padding: 20px;
+    background-color: #2b3035;
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-bottom: 1px solid #444;
+}
+
+.logo-section h2 {
+    margin: 0;
+}
+
+.logo-section i {
+    color: #0d6efd; /* Blue icon for a professional accent */
+    margin-right: 10px;
+}
+
+.main-nav {
+    flex-grow: 1;
+    padding-top: 10px;
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-nav li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: #d1d5db; /* Light grey text for better contrast */
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.main-nav li a i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+.main-nav li a:hover {
+    background-color: #3e444c;
+    color: #fff;
+}
+
+.main-nav li.active a {
+    background-color: #0d6efd;
+    color: #fff;
+    font-weight: 600;
+    border-left: 5px solid #fff;
+    padding-left: 15px;
+}
+
+.nav-header {
+    padding: 20px 20px 10px;
+    font-size: 0.8rem;
+    color: #8c92a4;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.nav-link {
+    color: #dee2e6;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: #4e73df;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom;
+}
+
+.nav-link:hover:before,
+.nav-link.active:before {
+    transform: scaleY(1);
+}
+
+.nav-link:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.main-content {
+    margin-left: 250px; /* Match sidebar width */
+    padding-top: 60px; /* Match header height */
+    height: 100vh;
+    overflow-y: auto;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Page content wrapper */
+.content {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    position: relative;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.watermark {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50% auto;
+    opacity: 0.05;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ---------------------------------------------------- */
+/* Main Content Wrapper & Header */
+/* ---------------------------------------------------- */
+.main-content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.top-header {
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align to the right */
+    padding: 10px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 250px; /* Match sidebar width */
+    height: 60px;
+    z-index: 1000;
+}
+
+.top-header .right-section {
+    display: flex;
+    align-items: center;
+}
+
+.top-header .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #444;
+}
+
+.top-header .user-profile i {
+    font-size: 1.2em;
+    color: #0d6efd;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 250px; /* Match sidebar width */
+    margin-top: 60px; /* Match header height */
+    padding: 20px 20px 40px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.5s ease-out forwards;
+    min-height: calc(100vh - 60px);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.content-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    position: relative;
+    min-height: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.content-container h2 {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    color: #2b3035;
+    font-weight: 600;
+}
+
+.form-container, .table-container {
+    margin-top: 30px;
+}
+
+.form-container h3, .table-container h3 {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #444;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: #555;
+    min-width: 120px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-group .add-service-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0);
+}
+
+.form-group .add-service-btn:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.form-group .add-service-btn:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(100, 100);
+        opacity: 0;
+    }
+}
+
+.btn {
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0);
+}
+
+.btn:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.btn:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.data-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: none;
+    overflow-y: visible;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    table-layout: auto;
+}
+
+.data-table th, .data-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.data-table thead {
+    background-color: #f8f9fa;
+    color: #444;
+    font-weight: 600;
+}
+
+.data-table tbody tr:nth-child(odd) {
+    background-color: #fdfdfd;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.data-table .actions-cell a {
+    color: #0d6efd;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: color 0.2s;
+}
+
+.data-table .actions-cell a:hover {
+    color: #0b5ed7;
+    text-decoration: underline;
+}
+
+/* ---------------------------------------------------- */
+/* Dark Mode Theme                                       */
+/* Applied when <body> has class="theme-dark"            */
+/* ---------------------------------------------------- */
+
+body.theme-dark {
+    background-color: #0b1120;
+    color: #e5e7eb;
+}
+
+body.theme-dark ::selection {
+    background-color: rgba(248, 113, 113, 0.35);
+    color: #f9fafb;
+}
+
+body.theme-dark #inventoryTable .low-stock ::selection,
+body.theme-dark #inventoryTable .critical-item ::selection {
+    background-color: rgba(248, 113, 113, 0.55);
+    color: #f9fafb;
+}
+
+body.theme-dark .main-content-wrapper {
+    background-color: transparent;
+}
+
+body.theme-dark .top-header {
+    background-color: #111827;
+    border-bottom-color: #1f2937;
+}
+
+body.theme-dark .top-header .left-section {
+    color: #e5e7eb;
+}
+
+body.theme-dark .top-header .user-profile {
+    color: #111827;
+}
+
+body.theme-dark .top-header .user-profile span,
+body.theme-dark .top-header .user-profile i {
+    color: #111827 !important;
+}
+
+body.theme-dark #userDropdown {
+    background-color: #ffffff !important;
+}
+
+body.theme-dark #userDropdown a,
+body.theme-dark #userDropdown a span,
+body.theme-dark #userDropdown a i {
+    color: #111827 !important;
+}
+
+body.theme-dark .content-container,
+body.theme-dark .card {
+    background-color: #020617;
+    border-color: #1f2937;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+body.theme-dark .content-container h2,
+body.theme-dark h3,
+body.theme-dark h4,
+body.theme-dark h5 {
+    color: #e5e7eb;
+}
+
+body.theme-dark .main-content {
+    background-color: transparent;
+}
+
+body.theme-dark .form-group label,
+body.theme-dark .patients-page .patient-form-label,
+body.theme-dark .services-page .service-form-field label,
+body.theme-dark .services-page .package-form-field label,
+body.theme-dark .services-page .package-services-panel label {
+    color: #e5e7eb;
+}
+
+body.theme-dark .form-group input[type="text"],
+body.theme-dark .form-group input[type="number"],
+body.theme-dark .form-group input[type="date"],
+body.theme-dark .form-group select,
+body.theme-dark .patient-form-control,
+body.theme-dark .service-input,
+body.theme-dark .package-input {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+/* Make calendar icon visible in dark mode for date inputs (e.g., Reports page filters) */
+body.theme-dark .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+body.theme-dark .form-group input::placeholder,
+body.theme-dark .patient-form-control::placeholder,
+body.theme-dark .services-page .services-search-input::placeholder,
+body.theme-dark .patients-search-input::placeholder {
+    color: #9ca3af;
+}
+
+body.theme-dark .data-table-wrapper {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+/* Transactions / Billing page dark mode tweaks */
+body.theme-dark .transactions-page .card {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+body.theme-dark .transactions-page .billing-form-panel {
+    background-color: #020617;
+    border-color: #1f2937;
+}
+
+body.theme-dark .transactions-page .billing-label {
+    color: #e5e7eb;
+}
+
+body.theme-dark .transactions-page .billing-input {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+body.theme-dark .transactions-page .billing-input::placeholder {
+    color: #9ca3af;
+}
+
+/* Make Billing date picker icon visible in dark mode */
+body.theme-dark .transactions-page .billing-input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+body.theme-dark .data-table thead {
+    background-color: #111827;
+    color: #e5e7eb;
+}
+
+body.theme-dark .data-table tbody tr:nth-child(odd) {
+    background-color: #020617;
+}
+
+body.theme-dark .data-table tbody tr:nth-child(even) {
+    background-color: #020617;
+}
+
+body.theme-dark .data-table th,
+body.theme-dark .data-table td {
+    border-bottom-color: #1f2937;
+}
+
+body.theme-dark .data-table .actions-cell a {
+    color: #60a5fa;
+}
+
+body.theme-dark .data-table .actions-cell a:hover {
+    color: #93c5fd;
+}
+
+body.theme-dark .patients-page .patient-form-panel {
+    background-color: #020617;
+    border-color: #1d4ed8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+body.theme-dark .services-page .service-form-card {
+    background-color: #022c22;
+    border-color: #16a34a;
+}
+
+body.theme-dark .services-page .package-form-card {
+    background-color: #020617;
+    border-color: #1d4ed8;
+}
+
+body.theme-dark .inventory-status-badge.low-stock {
+    background-color: #7f1d1d;
+}
+
+body.theme-dark .inventory-status-badge.in-stock {
+    background-color: #14532d;
+}
+
+body.theme-dark .patients-search-input,
+body.theme-dark .services-page .services-search-input {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+body.theme-dark .table-container {
+    background-color: transparent;
+}
+
+/* Transaction modal in dark mode */
+body.theme-dark .txn-modal-content {
+    background-color: #1f2937;
+    color: #e5e7eb;
+    border: 1px solid #374151;
+}
+
+body.theme-dark .txn-modal-content table {
+    color: #e5e7eb;
+}
+
+body.theme-dark .txn-modal-content th,
+body.theme-dark .txn-modal-content td {
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+body.theme-dark .txn-close-btn {
+    color: #e5e7eb;
+}
+
+body.theme-dark .txn-close-btn:hover {
+    color: #60a5fa;
+}
+
+/* Transaction Modal Styles */
+.txn-modal-content {
+    background-color: #fff;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.txn-modal-header {
+    padding: 12px 40px 12px 16px; /* Add more right padding for close button */
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    position: relative; /* For absolute positioning of close button */
+}
+
+.txn-modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.txn-modal-body {
+    max-height: 60vh;
+    overflow: auto;
+    padding: 16px;
+}
+
+.txn-print-btn {
+    margin-right: 10px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #3498db;
+    background: #3498db;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.txn-print-btn:hover {
+    background: #2980b9;
+    border-color: #2980b9;
+}
+
+.txn-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+.txn-close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode specific styles for the modal */
+body.theme-dark .txn-modal-header {
+    background-color: #1f2937;
+    border-bottom-color: #374151;
+}
+
+body.theme-dark .txn-close-btn {
+    color: #e5e7eb;
+}
+
+body.theme-dark .txn-close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Ensure tables in the modal are properly styled in dark mode */
+.txn-modal-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.txn-modal-content th,
+.txn-modal-content td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+body.theme-dark .txn-modal-content th,
+body.theme-dark .txn-modal-content td {
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+/* Transaction item styles */
+.txn-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.txn-item-header {
+    background-color: #f8f9fa;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.txn-item-body {
+    padding: 10px 12px;
+    background-color: #ffffff;
+}
+
+.txn-description,
+.txn-services,
+.txn-medicines {
+    margin-bottom: 6px;
+}
+
+/* Loading and error states */
+.txn-loading,
+.txn-no-data {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+}
+
+.txn-error {
+    text-align: center;
+    padding: 2rem;
+    color: #dc3545;
+}
+
+/* Dark mode styles */
+body.theme-dark .txn-item {
+    border-color: #4b5563;
+}
+
+body.theme-dark .txn-item-header {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+body.theme-dark .txn-item-body {
+    background-color: #1f2937;
+    color: #e5e7eb;
+}
+
+body.theme-dark .txn-loading,
+body.theme-dark .txn-no-data {
+    color: #9ca3af;
+}
+
+body.theme-dark .txn-error {
+    color: #f87171;
+}
+
+/* Auto-Deduct section theming */
+.auto-deduct-container {
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+/* Light theme */
+.auto-deduct-container {
+    background-color: #f9f9f9;
+    border: 1px dashed #ddd;
+    color: #333;
+}
+
+/* Dark theme */
+body.theme-dark .auto-deduct-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+}
+
+/* Ensure all text in the modal is visible in dark mode */
+body.theme-dark .txn-modal-content,
+body.theme-dark .txn-modal-content p,
+body.theme-dark .txn-modal-content span,
+body.theme-dark .txn-modal-content div,
+body.theme-dark .txn-modal-content td,
+body.theme-dark .txn-modal-content th,
+body.theme-dark .txn-modal-content .date,
+body.theme-dark .txn-modal-content .price,
+body.theme-dark .txn-modal-content [data-date],
+body.theme-dark .txn-modal-content [data-price] {
+    color: #e5e7eb !important;
+}
+
+/* Fix for date and price text color in dark mode */
+body.theme-dark .txn-modal-content,
+body.theme-dark .txn-modal-content p,
+body.theme-dark .txn-modal-content span,
+body.theme-dark .txn-modal-content div,
+body.theme-dark .txn-modal-content td,
+body.theme-dark .txn-modal-content th,
+body.theme-dark .txn-modal-content .date,
+body.theme-dark .txn-modal-content .price,
+body.theme-dark .txn-modal-content [data-date],
+body.theme-dark .txn-modal-content [data-price] {
+    color: #e5e7eb !important;
+}
+
+/* Global text and header adjustments for dark mode */
+body.theme-dark h1,
+body.theme-dark h2,
+body.theme-dark h3,
+body.theme-dark h4,
+body.theme-dark h5,
+body.theme-dark h6,
+body.theme-dark p,
+body.theme-dark span,
+body.theme-dark li,
+body.theme-dark label,
+body.theme-dark th,
+body.theme-dark td {
+    color: #e5e7eb;
+}
+
+body.theme-dark .text-muted,
+body.theme-dark .subtitle,
+body.theme-dark .small-text {
+    color: #9ca3af;
+}
+
+body.theme-dark a {
+    color: #60a5fa;
+}
+
+body.theme-dark a:hover {
+    color: #93c5fd;
+}
+
+body.theme-dark .card-header {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-bottom: 1px solid #1f2937;
+}
+
+/* Dashboard specific tweaks */
+body.theme-dark .dashboard-card {
+    background-color: #020617;
+    color: #e5e7eb;
+}
+
+body.theme-dark .dashboard-card h3 {
+    color: #e5e7eb;
+}
+
+body.theme-dark .metric-card h4 {
+    color: #e5e7eb;
+}
+
+/* KPI metric cards (top boxes) in dark mode */
+body.theme-dark .metric-card {
+    background: #020617;
+    border-color: #1f2937;
+}
+
+body.theme-dark .metric-card h4 {
+    color: #e5e7eb;
+}
+
+body.theme-dark .metric-card .metric-value {
+    color: #e5e7eb !important;
+}
+
+body.theme-dark .metric-card .metric-number {
+    color: #e5e7eb;
+}
+
+/* Low stock inventory text in dashboard list */
+body.theme-dark .stock-item {
+    color: #e5e7eb;
+}
+
+body.theme-dark .stock-quantity {
+    color: #f97316;
+}
+
+/* ------------------------------------------------------------------ */
+/* Page-specific readability fixes in dark mode                        */
+/* ------------------------------------------------------------------ */
+
+/* Patients table header */
+body.theme-dark .patients-page thead {
+    background-color: #111827;
+}
+
+body.theme-dark .patients-page th {
+    color: #e5e7eb;
+    border-color: #1f2937;
+}
+
+/* Services table header */
+body.theme-dark .services-page thead {
+    background-color: #111827;
+}
+
+body.theme-dark .services-page th {
+    color: #e5e7eb;
+    border-color: #1f2937;
+}
+
+/* Transactions (Billing) table header */
+body.theme-dark .transactions-page .transactions-table-wrapper thead {
+    background-color: #111827;
+}
+
+body.theme-dark .transactions-page .transactions-table-wrapper th {
+    color: #e5e7eb;
+    border-color: #1f2937;
+}
+
+/* Inventory and Reports data tables (use shared .data-table class) */
+body.theme-dark .data-table thead {
+    background-color: #111827;
+    color: #e5e7eb;
+}
+
+body.theme-dark .data-table tbody tr {
+    background-color: #020617;
+}
+
+body.theme-dark .data-table th,
+body.theme-dark .data-table td {
+    border-bottom-color: #1f2937;
+}
+
+/* Inventory "Current Stock" card and search in dark mode */
+body.theme-dark .table-card {
+    background-color: #020617;
+    border-color: #1f2937;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+}
+
+body.theme-dark .table-card h1,
+body.theme-dark .table-card h2,
+body.theme-dark .table-card h3 {
+    color: #e5e7eb;
+}
+
+body.theme-dark .table-card .search-input {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+/* Services Inventory Integration panel and bundle selector */
+body.theme-dark .services-page .inventory-panel {
+    background-color: #020617;
+}
+
+body.theme-dark .services-page .inventory-panel h5,
+body.theme-dark .services-page .inventory-panel p,
+body.theme-dark .services-page .inventory-panel label {
+    color: #e5e7eb;
+}
+
+/* Services page: category filter dropdown sizing */
+.services-page #services-category-filter {
+    display: inline-block;
+    border-radius: 8px;
+    padding: 6px 10px;
+    border: 1px solid #bfc4d1;
+    background-color: #ffffff;
+    font-size: 0.9rem;
+}
+
+/* Patients page dark mode tweaks */
+body.theme-dark .patients-page .card {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+body.theme-dark .patients-page .patient-form-panel {
+    background-color: #020617;
+    border-color: #1f2937;
+    color: #e5e7eb;
+}
+
+body.theme-dark .patients-page label {
+    color: #e5e7eb;
+}
+
+/* Make Patients date picker icon visible in dark mode */
+body.theme-dark .patients-page input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+/* Services page dark mode tweaks */
+body.theme-dark .services-page .card {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+body.theme-dark .services-page .service-form-panel {
+    background-color: #020617;
+    border-color: #1f2937;
+    color: #e5e7eb;
+}
+
+body.theme-dark .services-page label {
+    color: #e5e7eb;
+}
+
+/* Make Services date picker icon visible in dark mode */
+body.theme-dark .services-page input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+body.theme-dark .services-page .inventory-panel select,
+body.theme-dark .services-page .inventory-panel input[type="number"] {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+body.theme-dark .services-page .package-services-panel,
+body.theme-dark .services-page .package-services-list {
+    background-color: #020617;
+}
+
+body.theme-dark .services-page .package-services-list label,
+body.theme-dark .services-page .package-services-list input[type="checkbox"] {
+    color: #e5e7eb;
+}
+
+/* Auto-deduct details box in Services table - dark mode override */
+body.theme-dark .services-page td div[style*="background: #f9f9f9"] {
+    background-color: #020617 !important;
+    color: #e5e7eb !important;
+    border-color: #1f2937 !important;
+}
+
+/* Patients & Services table headers: dark header background with light text */
+body.theme-dark .patients-page table thead tr,
+body.theme-dark .services-page table thead tr {
+    background-color: #111827 !important;
+}
+
+body.theme-dark .patients-page table thead th,
+body.theme-dark .services-page table thead th {
+    color: #e5e7eb !important;
+    border-color: #1f2937 !important;
+}
+
+/* Billing Transactions List title and header */
+body.theme-dark .transactions-page .transactions-table-title {
+    color: #e5e7eb;
+}
+
+body.theme-dark .transactions-page .transactions-table-wrapper thead tr {
+    background-color: #111827 !important;
+}
+
+body.theme-dark .transactions-page .transactions-table-wrapper th {
+    color: #e5e7eb !important;
+}
+
+body.theme-dark .transactions-page .billing-form-panel {
+    background-color: #020617;
+    border-color: #1f2937;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+}
+
+body.theme-dark .transactions-page .billing-label {
+    color: #e5e7eb;
+}
+
+body.theme-dark .transactions-page .billing-input,
+body.theme-dark .transactions-page .billing-select,
+body.theme-dark .transactions-page .transactions-search-input {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+body.theme-dark .transactions-page .transactions-table-wrapper {
+    background-color: #020617;
+    border-color: #1f2937;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+}
+
+/* Inventory table headers and status badges */
+body.theme-dark #inventoryTable thead tr {
+    background-color: #111827 !important;
+}
+
+body.theme-dark #inventoryTable th {
+    color: #e5e7eb !important;
+}
+
+/* Override Inventory page's light table header styles in dark mode */
+body.theme-dark .page-container #inventoryTable thead th {
+    background-color: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+body.theme-dark #inventoryTable tbody tr:hover {
+    background-color: rgba(55, 65, 81, 0.9) !important;
+}
+
+body.theme-dark #inventoryTable .low-stock:hover {
+    background-color: rgba(127, 29, 29, 0.55) !important;
+}
+
+body.theme-dark .status-critical {
+    color: #ef4444 !important;
+}
+
+body.theme-dark .status-in-stock {
+    color: #22c55e !important;
+}
+
+/* Base status badge pill in dark mode (remove white background) */
+body.theme-dark .status-badge {
+    background-color: transparent !important;
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+/* Inventory edit/add modal dark mode */
+body.theme-dark #inventoryModal .modal-content {
+    background-color: #020617;
+    color: #e5e7eb;
+    border: 1px solid #1f2937;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.85);
+}
+
+body.theme-dark #inventoryModal label {
+    color: #e5e7eb;
+}
+
+body.theme-dark #inventoryModal input[type="text"],
+body.theme-dark #inventoryModal input[type="number"],
+body.theme-dark #inventoryModal input[type="date"],
+body.theme-dark #inventoryModal select {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+body.theme-dark #inventoryModal input[type="text"]::placeholder,
+body.theme-dark #inventoryModal input[type="number"]::placeholder,
+body.theme-dark #inventoryModal input[type="date"]::placeholder {
+    color: #6b7280;
+}
+
+body.theme-dark #inventoryModal .close-btn {
+    color: #9ca3af;
+}
+
+body.theme-dark #inventoryModal .close-btn:hover,
+body.theme-dark #inventoryModal .close-btn:focus {
+    color: #e5e7eb;
+}
+
+/* Analytics / Reports page: dark cards and controls in dark mode */
+body.theme-dark .analytics-page .report-controls,
+body.theme-dark .analytics-page .stat-card,
+body.theme-dark .analytics-page .chart-card,
+body.theme-dark .analytics-page .table-card,
+body.theme-dark .analytics-page .print-section {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #1f2937;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+}
+
+body.theme-dark .analytics-page .report-controls h3,
+body.theme-dark .analytics-page .form-group label,
+body.theme-dark .analytics-page .stat-card h4,
+body.theme-dark .analytics-page .stat-card .stat-value,
+body.theme-dark .analytics-page .stat-card .stat-label,
+body.theme-dark .analytics-page .chart-card h3,
+body.theme-dark .analytics-page .table-card h3,
+body.theme-dark .analytics-page .print-section h3 {
+    color: #e5e7eb;
+}
+
+/* Analytics dark-mode form controls (report type, start/end date, etc.) */
+body.theme-dark .analytics-page .report-controls .form-group select,
+body.theme-dark .analytics-page .report-controls .form-group input {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+/* Override light "Report Period" info box inside report-controls */
+body.theme-dark .analytics-page .report-controls div[style*="background-color: #e8f4fd"] {
+    background-color: #020617 !important;
+    border-left-color: #60a5fa !important;
+    color: #e5e7eb !important;
+}
+
+/* Analytics data tables: use dark theme consistent with other tables */
+body.theme-dark .analytics-page .data-table thead {
+    background-color: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+body.theme-dark .analytics-page .data-table tbody tr {
+    background-color: #020617;
+}
+
+body.theme-dark .analytics-page .data-table th,
+body.theme-dark .analytics-page .data-table td {
+    color: #e5e7eb !important;
+    border-bottom-color: #1f2937 !important;
+}
+
+/* Extra specificity for Analytics summary table headers (Service/Count/Revenue, etc.) */
+body.theme-dark .analytics-page .table-card table.data-table thead tr th {
+    background-color: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+/* Dark-mode specific styling for Reset button in Reports */
+body.theme-dark .analytics-page .btn.btn-secondary {
+    background-color: #4b5563;
+    color: #e5e7eb;
+}
+
+body.theme-dark .analytics-page .btn.btn-secondary:hover {
+    background-color: #374151;
+}
+
+/* Settings pages base card layout */
+.settings-container .card {
+    min-height: 30vh;
+    min-width: 200px;
+    margin: 10px;
+    padding: 20px; 
+    box-sizing: border-box;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+.settings-container .card .card-body {
+    padding-top: 20px;
+}
+
+/* Settings cards in dark mode (System Configuration, etc.) */
+body.theme-dark .settings-container .card {
+    background-color: #020617;
+    color: #e5e7eb;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+    border: 1px solid #1f2937;
+}
+
+body.theme-dark .settings-container .card .card-header {
+    background-color: #020617;
+    color: #e5e7eb;
+    border-bottom-color: #1f2937;
+}
+
+/* Adjust spacing for settings card headers (light + dark) */
+.settings-container .card .card-header {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+/* Generic settings labels/fields in dark mode (System Configuration, etc.) */
+body.theme-dark .settings-container .form-group label {
+    color: #e5e7eb !important;
+}
+
+body.theme-dark .settings-container .form-group input,
+body.theme-dark .settings-container .form-group textarea,
+body.theme-dark .settings-container .form-group select {
+    background-color: #020617 !important;
+    color: #e5e7eb !important;
+    border-color: #374151 !important;
+}
+
+/* Existing Users table header/body text */
+body.theme-dark .settings-container .user-list-table thead tr {
+    background-color: #ecf0f1 !important;
+}
+
+body.theme-dark .settings-container .user-list-table th,
+body.theme-dark .settings-container .user-list-table td {
+    color: #111827;
+}
+
