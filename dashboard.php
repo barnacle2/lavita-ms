@@ -45,7 +45,7 @@ $low_stock_thresholds = [
     'bottle' => 3,
     'bottles' => 3,
     'pcs' => 10,
-    'pieces' => 10, 
+    'pieces' => 10,
     'pack' => 5,
     'packs' => 5,
 ];
@@ -57,7 +57,7 @@ $default_threshold = 10; // Default threshold for unlisted unit types
 $inventoryCheckResult = $conn->query("SELECT item_name, stock_quantity, unit_type, low_stock_threshold FROM inventory");
 $lowStockItemsCount = 0; // Count of low stock items based on unit-specific thresholds
 $criticalItemsCount = 0; // Count of items below the fixed critical threshold
-$criticalThreshold = 10; 
+$criticalThreshold = 10;
 $lowStockItems = [];      // Detailed list for the dashboard card
 
 if ($inventoryCheckResult) {
@@ -67,7 +67,7 @@ if ($inventoryCheckResult) {
         // 1. Low Stock Check (Unit-Specific + optional per-item override)
         // Prefer per-item custom threshold if set, otherwise fall back to unit/default
         if (isset($row['low_stock_threshold']) && $row['low_stock_threshold'] !== null && $row['low_stock_threshold'] !== '') {
-            $low_stock_threshold = (int)$row['low_stock_threshold'];
+            $low_stock_threshold = (int) $row['low_stock_threshold'];
         } else {
             $low_stock_threshold = $low_stock_thresholds[$unit_type_lower] ?? $default_threshold;
         }
@@ -98,6 +98,27 @@ $stmt->execute();
 $earningsResult = $stmt->get_result();
 $todaysEarnings = $earningsResult->fetch_assoc()['todays_earnings'] ?? 0;
 $stmt->close();
+
+// All-Time Earnings (Total amount from all transactions)
+$allTimeEarningsQuery = "SELECT SUM(total_amount) AS all_time_earnings FROM transactions";
+$allTimeResult = $conn->query($allTimeEarningsQuery);
+$allTimeEarnings = 0;
+if ($allTimeResult) {
+    $allTimeRow = $allTimeResult->fetch_assoc();
+    $allTimeEarnings = $allTimeRow['all_time_earnings'] ?? 0;
+}
+
+// Total Expenses (Sum of all expenses)
+$totalExpensesQuery = "SELECT SUM(amount) AS total_expenses FROM expenses";
+$expensesResult = $conn->query($totalExpensesQuery);
+$totalExpenses = 0;
+if ($expensesResult) {
+    $expensesRow = $expensesResult->fetch_assoc();
+    $totalExpenses = $expensesRow['total_expenses'] ?? 0;
+}
+
+// Net Earnings (All-Time Earnings - Total Expenses)
+$netEarnings = $allTimeEarnings - $totalExpenses;
 
 
 // --- 4. Services Rendered Today ---
@@ -156,7 +177,9 @@ if ($recentPatientsResult) {
         $recentPatients[] = $row;
     }
 }
-if (isset($recentPatientsStmt)) { $recentPatientsStmt->close(); }
+if (isset($recentPatientsStmt)) {
+    $recentPatientsStmt->close();
+}
 
 
 // --- Chart Data (Today's Focus) ---
@@ -184,7 +207,7 @@ $svcBillResult = $svcBillQuery->get_result();
 if ($svcBillResult) {
     while ($row = $svcBillResult->fetch_assoc()) {
         $name = $row['service_name'] ?? 'Unknown Service';
-        $total = (float)($row['total_revenue'] ?? 0);
+        $total = (float) ($row['total_revenue'] ?? 0);
         $serviceBillingData[$name] = $total;
     }
 }
@@ -197,95 +220,166 @@ $serviceBillingValues = array_values($serviceBillingData);
 
 ?>
 <style>
-/* Redesigned Dashboard Styles */
-:root {
-    --card-bg: #ffffff;
-    --card-border: #e9edf2;
-    --text-muted: #6b7280;
-    --text-strong: #111827;
-    --shadow-soft: 0 8px 24px rgba(0,0,0,0.06);
-}
+    /* Redesigned Dashboard Styles */
+    :root {
+        --card-bg: #ffffff;
+        --card-border: #e9edf2;
+        --text-muted: #6b7280;
+        --text-strong: #111827;
+        --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
 
-.content-header h1 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--text-strong);
-    letter-spacing: .2px;
-}
+    .content-header h1 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-strong);
+        letter-spacing: .2px;
+    }
 
-/* KPI cards grid */
-.dashboard-metrics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-}
+    /* KPI cards grid */
+    .dashboard-metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
 
-.metric-card {
-    position: relative;
-    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: var(--shadow-soft);
-    transition: transform .15s ease, box-shadow .15s ease;
-    display: grid;
-    grid-template-rows: auto auto;
-    row-gap: 8px;
-}
-.metric-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.08);} 
+    .metric-card {
+        position: relative;
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: var(--shadow-soft);
+        transition: transform .15s ease, box-shadow .15s ease;
+        display: grid;
+        grid-template-rows: auto auto;
+        row-gap: 8px;
+    }
 
-.metric-icon {
-    width: 44px; height: 44px; display: grid; place-items: center;
-    border-radius: 10px; color: #fff; font-size: 20px;
-    background: linear-gradient(135deg, #4f46e5, #06b6d4);
-}
-.metric-card.low-stock .metric-icon { background: linear-gradient(135deg, #f59e0b, #fbbf24);} 
-.metric-card.critical .metric-icon { background: linear-gradient(135deg, #ef4444, #f87171);} 
+    .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
 
-.metric-card h4 { margin: 0; font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: .6px; }
-.metric-value {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-strong);
-}
+    .metric-icon {
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 20px;
+        background: linear-gradient(135deg, #4f46e5, #06b6d4);
+    }
 
-.metric-number {
-    font-weight: 800;
-    font-size: clamp(20px, 2.4vw, 28px);
-    line-height: 1;
-    max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+    .metric-card.low-stock .metric-icon {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    }
 
-/* Panels grid */
-.dashboard-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 992px){ .dashboard-container { grid-template-columns: 1fr; } }
+    .metric-card.critical .metric-icon {
+        background: linear-gradient(135deg, #ef4444, #f87171);
+    }
 
-.dashboard-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: var(--shadow-soft);
-}
-.dashboard-card h3 { margin: 0 0 10px 0; font-size: 15px; color: var(--text-strong); border-bottom: 1px solid #eef2f6; padding-bottom: 8px; }
+    .metric-card h4 {
+        margin: 0;
+        font-size: 12px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: .6px;
+    }
 
-.chart-container { height: 300px; width: 100%; margin-top: 10px; }
+    .metric-value {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-strong);
+    }
 
-.dashboard-list { list-style: none; margin: 0; padding: 0; }
-.dashboard-list li { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed #eef2f6; }
-.dashboard-list li:last-child { border-bottom: none; }
-.stock-item { font-weight: 600; color: var(--text-strong); }
-.stock-quantity { color: #ef4444; font-weight: 700; }
+    .metric-number {
+        font-weight: 800;
+        font-size: clamp(20px, 2.4vw, 28px);
+        line-height: 1;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-/* Color accents for numeric values in KPI cards */
-.metric-card[style*="1cc88a"] .metric-icon { background: linear-gradient(135deg, #10b981, #34d399); }
-.metric-card[style*="36b9cc"] .metric-icon { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
-.metric-card[style*="f6c23e"] .metric-icon { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+    /* Panels grid */
+    .dashboard-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    @media (max-width: 992px) {
+        .dashboard-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .dashboard-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: var(--shadow-soft);
+    }
+
+    .dashboard-card h3 {
+        margin: 0 0 10px 0;
+        font-size: 15px;
+        color: var(--text-strong);
+        border-bottom: 1px solid #eef2f6;
+        padding-bottom: 8px;
+    }
+
+    .chart-container {
+        height: 300px;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .dashboard-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dashboard-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px dashed #eef2f6;
+    }
+
+    .dashboard-list li:last-child {
+        border-bottom: none;
+    }
+
+    .stock-item {
+        font-weight: 600;
+        color: var(--text-strong);
+    }
+
+    .stock-quantity {
+        color: #ef4444;
+        font-weight: 700;
+    }
+
+    /* Color accents for numeric values in KPI cards */
+    .metric-card[style*="1cc88a"] .metric-icon {
+        background: linear-gradient(135deg, #10b981, #34d399);
+    }
+
+    .metric-card[style*="36b9cc"] .metric-icon {
+        background: linear-gradient(135deg, #06b6d4, #22d3ee);
+    }
+
+    .metric-card[style*="f6c23e"] .metric-icon {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    }
 </style>
 <div class="content-header">
     <h1>Overview - <?php echo $displayDate; ?></h1>
@@ -299,7 +393,7 @@ $serviceBillingValues = array_values($serviceBillingData);
             <span class="metric-number"><?php echo $newPatientsToday; ?></span>
         </div>
     </div>
-    
+
     <div class="metric-card" style="border-left-color: #1cc88a;">
         <h4>Today's Earnings (₱)</h4>
         <div class="metric-value" style="color: #1cc88a;">
@@ -307,14 +401,15 @@ $serviceBillingValues = array_values($serviceBillingData);
             <span class="metric-number"><?php echo number_format($todaysEarnings, 2); ?></span>
         </div>
     </div>
-    
+
     <div class="metric-card" style="border-left-color: #36b9cc;">
         <h4>Total Transactions Today</h4>
         <div class="metric-value" style="color: #36b9cc;">
             <i class="fas fa-handshake metric-icon" style="color: #eef2f6;"></i>
             <span class="metric-number"><?php echo $serviceTxnCount; ?></span>
         </div>
-        <small class="text-muted" style="margin-top: 5px;">Top Service: <strong><?php echo htmlspecialchars($topServiceName); ?></strong></small>
+        <small class="text-muted" style="margin-top: 5px;">Top Service:
+            <strong><?php echo htmlspecialchars($topServiceName); ?></strong></small>
     </div>
 
     <div class="metric-card" style="border-left-color: #f6c23e;">
@@ -324,7 +419,7 @@ $serviceBillingValues = array_values($serviceBillingData);
             <span class="metric-number"><?php echo $totalItemsInStock; ?></span>
         </div>
     </div>
-    
+
     <div class="metric-card low-stock">
         <h4>Low Stock Items (Unit-Specific)</h4>
         <div class="metric-value">
@@ -335,9 +430,33 @@ $serviceBillingValues = array_values($serviceBillingData);
 
     <div class="metric-card critical">
         <h4>Critical Stock (<10 Units)</h4>
-        <div class="metric-value">
-            <i class="fas fa-skull-crossbones metric-icon"></i>
-            <span class="metric-number"><?php echo $criticalItemsCount; ?></span>
+                <div class="metric-value">
+                    <i class="fas fa-skull-crossbones metric-icon"></i>
+                    <span class="metric-number"><?php echo $criticalItemsCount; ?></span>
+                </div>
+    </div>
+
+    <div class="metric-card" style="border-left-color: #27ae60;">
+        <h4>All-Time Earnings (₱)</h4>
+        <div class="metric-value" style="color: #27ae60;">
+            <i class="fas fa-chart-line metric-icon" style="color: #eef2f6;"></i>
+            <span class="metric-number"><?php echo number_format($allTimeEarnings, 2); ?></span>
+        </div>
+    </div>
+
+    <div class="metric-card" style="border-left-color: #e74c3c;">
+        <h4>Total Expenses (₱)</h4>
+        <div class="metric-value" style="color: #e74c3c;">
+            <i class="fas fa-receipt metric-icon" style="color: #eef2f6;"></i>
+            <span class="metric-number"><?php echo number_format($totalExpenses, 2); ?></span>
+        </div>
+    </div>
+
+    <div class="metric-card" style="border-left-color: #f39c12;">
+        <h4>Net Earnings (₱)</h4>
+        <div class="metric-value" style="color: <?php echo $netEarnings < 0 ? '#e74c3c' : '#f39c12'; ?>;">
+            <i class="fas fa-wallet metric-icon" style="color: #eef2f6;"></i>
+            <span class="metric-number"><?php echo number_format($netEarnings, 2); ?></span>
         </div>
     </div>
 </div>
@@ -346,25 +465,25 @@ $serviceBillingValues = array_values($serviceBillingData);
     <div class="dashboard-card">
         <h3>Today's Service Frequency</h3>
         <?php if (!empty($serviceLabels)): ?>
-        <div class="chart-container">
-            <canvas id="serviceSalesChart"></canvas>
-        </div>
+            <div class="chart-container">
+                <canvas id="serviceSalesChart"></canvas>
+            </div>
         <?php else: ?>
             <p>No services recorded today.</p>
         <?php endif; ?>
     </div>
-    
+
     <div class="dashboard-card">
         <h3>Billing for Services (Top 5)</h3>
         <?php if (!empty($serviceBillingValues)): ?>
-        <div class="chart-container">
-            <canvas id="inventorySalesChart"></canvas>
-        </div>
+            <div class="chart-container">
+                <canvas id="inventorySalesChart"></canvas>
+            </div>
         <?php else: ?>
             <p>No service billings recorded today.</p>
         <?php endif; ?>
     </div>
-    
+
     <div class="dashboard-card">
         <h3>Low Stock Inventory</h3>
         <ul class="dashboard-list">
@@ -380,19 +499,19 @@ $serviceBillingValues = array_values($serviceBillingData);
             <?php endif; ?>
         </ul>
     </div>
-    
+
     <div class="dashboard-card dashboard-section recent-patients-list">
         <h3>Recent Patients</h3>
         <?php if (!empty($recentPatients)): ?>
-        <ul>
-            <?php foreach ($recentPatients as $patient): ?>
-                <li>
-                    <strong><?php echo htmlspecialchars($patient['fullname']); ?></strong>
-                    <br>
-                    <small>Registered on: <?php echo date('M d, Y', strtotime($patient['date_registered'])); ?></small>
-                </li>
-            <?php endforeach; ?>
-        </ul>
+            <ul>
+                <?php foreach ($recentPatients as $patient): ?>
+                    <li>
+                        <strong><?php echo htmlspecialchars($patient['fullname']); ?></strong>
+                        <br>
+                        <small>Registered on: <?php echo date('M d, Y', strtotime($patient['date_registered'])); ?></small>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
         <?php else: ?>
             <p>No recent patients to display.</p>
         <?php endif; ?>
@@ -401,7 +520,7 @@ $serviceBillingValues = array_values($serviceBillingData);
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// No date picker logic needed for a "Today" dashboard
+    // No date picker logic needed for a "Today" dashboard
 </script>
 <script>
     // --- Sales by Service Chart (Today) ---
@@ -435,11 +554,11 @@ $serviceBillingValues = array_values($serviceBillingData);
             }
         });
     }
-    
+
     // --- Billing for Services Chart (Today's Top 5) ---
     const inventorySalesLabels = <?php echo json_encode($serviceBillingLabels); ?>;
     const inventorySalesValues = <?php echo json_encode($serviceBillingValues); ?>;
-    
+
     if (inventorySalesLabels.length > 0) {
         const inventorySalesCtx = document.getElementById('inventorySalesChart').getContext('2d');
         new Chart(inventorySalesCtx, {

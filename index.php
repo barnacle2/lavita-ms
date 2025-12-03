@@ -55,6 +55,7 @@ $sectionTitles = [
     'services' => 'Service and Package Management',
     'transactions' => 'Billing Management',
     'inventory' => 'Inventory Management',
+    'expenses' => 'Expense Management',
     'analytics' => 'Analytics & Reports',
     'settings_clinic' => 'Clinic Details',
     'settings_users' => 'User Management',
@@ -81,6 +82,7 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +102,7 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
         --text-color: #34495e;
         --border-color: #e0e0e0;
     }
-    
+
     .dashboard-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -155,12 +157,13 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
         font-weight: bold;
         color: var(--secondary-color);
     }
-    
+
     .dashboard-list {
         list-style: none;
         padding: 0;
         margin: 0;
-        overflow-y: auto; /* Make the list scrollable if it gets too long */
+        overflow-y: auto;
+        /* Make the list scrollable if it gets too long */
         flex-grow: 1;
     }
 
@@ -171,25 +174,25 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
         justify-content: space-between;
         align-items: center;
     }
-    
+
     .dashboard-list li:last-child {
         border-bottom: none;
     }
-    
+
     .dashboard-list .patient-name {
         font-weight: bold;
         color: var(--primary-color);
     }
-    
+
     .dashboard-list .date {
         font-size: 0.9em;
         color: #777;
     }
-    
+
     .dashboard-list .stock-item {
         color: var(--text-color);
     }
-    
+
     .dashboard-list .stock-quantity {
         font-weight: bold;
         color: var(--accent-color);
@@ -200,7 +203,8 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
         position: relative;
         height: 300px;
         width: 100%;
-        margin-top: 50px; /* Pushes the chart to the bottom of the card */
+        margin-top: 50px;
+        /* Pushes the chart to the bottom of the card */
     }
 
     /* Responsive adjustments */
@@ -214,6 +218,7 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
         }
     }
 </style>
+
 <body class="<?php echo htmlspecialchars($themeClass); ?>">
     <div class="app-container">
 
@@ -229,7 +234,7 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
                             <i class="fas fa-tachometer-alt"></i> Dashboard
                         </a>
                     </li>
-                   
+
                     <li class="<?php echo ($page == 'patients') ? 'active' : ''; ?>">
                         <a href="?page=patients">
                             <i class="fas fa-user-injured"></i> Patients
@@ -246,12 +251,17 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
                             <i class="fas fa-file-invoice-dollar"></i> Billing
                         </a>
                     </li>
-                     <li class="<?php echo ($page == 'inventory') ? 'active' : ''; ?>">
+                    <li class="<?php echo ($page == 'inventory') ? 'active' : ''; ?>">
                         <a href="?page=inventory">
                             <i class="fas fa-boxes"></i> Inventory
                         </a>
-                    </li>                   
-                     <li class="<?php echo ($page == 'analytics') ? 'active' : ''; ?>">
+                    </li>
+                    <li class="<?php echo ($page == 'expenses') ? 'active' : ''; ?>">
+                        <a href="?page=expenses">
+                            <i class="fas fa-receipt"></i> Expenses
+                        </a>
+                    </li>
+                    <li class="<?php echo ($page == 'analytics') ? 'active' : ''; ?>">
                         <a href="?page=analytics">
                             <i class="fas fa-chart-line"></i> Reports
                         </a>
@@ -277,32 +287,39 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
         </aside>
 
         <div class="main-content-wrapper">
-            <header class="top-header" style="display:flex; align-items:center; justify-content:space-between; padding: 10px 15px; border-bottom:1px solid var(--border-color); background:#fff;">
+            <header class="top-header"
+                style="display:flex; align-items:center; justify-content:space-between; padding: 10px 15px; border-bottom:1px solid var(--border-color); background:#fff;">
                 <div class="left-section" style="font-weight:700; font-size:1.1rem; color: #000;">
                     <?php echo htmlspecialchars($activeTitle); ?>
                 </div>
                 <div class="right-section">
-                    <div class="user-profile" id="userProfileDropdown" style="position: relative; display: inline-block; cursor: pointer; padding: 10px 15px;">
+                    <div class="user-profile" id="userProfileDropdown"
+                        style="position: relative; display: inline-block; cursor: pointer; padding: 10px 15px;">
                         <div style="display: flex; align-items: center;">
                             <i class="fas fa-user-circle" style="margin-right: 8px;"></i>
                             <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
                             <i class="fas fa-caret-down" style="margin-left: 5px;"></i>
                         </div>
-                        <div id="userDropdown" style="display: none; position: absolute; left: 0; top: 100%; background: white; min-width: 180px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1); z-index: 1000; border-radius: 4px; margin-top: 5px; border: 1px solid #e0e0e0;">
-                            <a href="logout.php" style="display: flex; align-items: center; padding: 10px 15px; color: #333; text-decoration: none; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
-                                <i class="fas fa-sign-out-alt" style="margin-right: 8px; width: 20px; text-align: center;"></i>
+                        <div id="userDropdown"
+                            style="display: none; position: absolute; left: 0; top: 100%; background: white; min-width: 180px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1); z-index: 1000; border-radius: 4px; margin-top: 5px; border: 1px solid #e0e0e0;">
+                            <a href="logout.php"
+                                style="display: flex; align-items: center; padding: 10px 15px; color: #333; text-decoration: none; transition: background-color 0.2s;"
+                                onmouseover="this.style.backgroundColor='#f8f9fa'"
+                                onmouseout="this.style.backgroundColor='white'">
+                                <i class="fas fa-sign-out-alt"
+                                    style="margin-right: 8px; width: 20px; text-align: center;"></i>
                                 <span>Logout</span>
                             </a>
                         </div>
                     </div>
                     <script>
-                        document.getElementById('userProfileDropdown').addEventListener('click', function() {
+                        document.getElementById('userProfileDropdown').addEventListener('click', function () {
                             var dropdown = document.getElementById('userDropdown');
                             dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
                         });
-                        
+
                         // Close the dropdown when clicking outside
-                        document.addEventListener('click', function(event) {
+                        document.addEventListener('click', function (event) {
                             var dropdown = document.getElementById('userDropdown');
                             var userProfile = document.getElementById('userProfileDropdown');
                             if (!userProfile.contains(event.target)) {
@@ -328,6 +345,7 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
 
     </div>
 </body>
+
 </html>
 
 <?php

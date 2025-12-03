@@ -196,6 +196,27 @@ try {
     $serviceOnlyStats = [];
 }
 
+// Get expenses for the period
+$expensesQuery = "SELECT * FROM expenses WHERE DATE(expense_date) BETWEEN ? AND ? ORDER BY expense_date DESC";
+$expenses = [];
+$totalExpenses = 0;
+$stmt = $conn->prepare($expensesQuery);
+if ($stmt) {
+    $stmt->bind_param('ss', $startDate, $endDate);
+    $stmt->execute();
+    $expensesResult = $stmt->get_result();
+    if ($expensesResult) {
+        while ($row = $expensesResult->fetch_assoc()) {
+            $expenses[] = $row;
+            $totalExpenses += (float)$row['amount'];
+        }
+    } else {
+        // Log error if any
+        error_log("Error in expenses query: " . $conn->error);
+    }
+    $stmt->close();
+}
+
 // Get inventory sales - include medicines dispensed and service-bound inventory (including packages)
 $inventoryStats = [];
 try {
@@ -591,7 +612,7 @@ $conn->close();
         </div>
 
         <div class="section">
-            <h3>Service Performance</h3>
+            <h3>Invidual Services Performance</h3>
             <table class="data-table">
                 <thead>
                     <tr>
@@ -601,8 +622,15 @@ $conn->close();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($serviceStats)): ?>
-                        <?php foreach ($serviceStats as $service): ?>
+                    <?php 
+                    $serviceTotalCount = 0;
+                    $serviceTotalRevenue = 0;
+                    
+                    if (!empty($serviceStats)): ?>
+                        <?php foreach ($serviceStats as $service): 
+                            $serviceTotalCount += (int)$service['service_count'];
+                            $serviceTotalRevenue += (float)($service['service_revenue'] ?? 0);
+                            ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($service['service_name']); ?></td>
                                 <td><?php echo number_format($service['service_count']); ?></td>
@@ -615,6 +643,13 @@ $conn->close();
                         </tr>
                     <?php endif; ?>
                 </tbody>
+                <tfoot>
+                    <tr style="background-color: #f8f9fa; font-weight: bold;">
+                        <td>Total</td>
+                        <td><?php echo number_format($serviceTotalCount); ?></td>
+                        <td>₱<?php echo number_format($serviceTotalRevenue, 2); ?></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
@@ -629,8 +664,15 @@ $conn->close();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($packageServiceStats)): ?>
-                        <?php foreach ($packageServiceStats as $pkg): ?>
+                    <?php 
+                    $packageTotalCount = 0;
+                    $packageTotalRevenue = 0;
+                    
+                    if (!empty($packageServiceStats)): ?>
+                        <?php foreach ($packageServiceStats as $pkg): 
+                            $packageTotalCount += (int)$pkg['service_count'];
+                            $packageTotalRevenue += (float)($pkg['service_revenue'] ?? 0);
+                            ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($pkg['service_name']); ?></td>
                                 <td><?php echo number_format($pkg['service_count']); ?></td>
@@ -643,11 +685,18 @@ $conn->close();
                         </tr>
                     <?php endif; ?>
                 </tbody>
+                <tfoot>
+                    <tr style="background-color: #f8f9fa; font-weight: bold;">
+                        <td>Total</td>
+                        <td><?php echo number_format($packageTotalCount); ?></td>
+                        <td>₱<?php echo number_format($packageTotalRevenue, 2); ?></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
         <div class="section">
-            <h3>All Availed Services (Including Bundles)</h3>
+            <h3>Breakdown of Services in Bundles</h3>
             <table class="data-table">
                 <thead>
                     <tr>
@@ -656,8 +705,13 @@ $conn->close();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($serviceOnlyStats)): ?>
-                        <?php foreach ($serviceOnlyStats as $svc): ?>
+                    <?php 
+                    $serviceOnlyTotalCount = 0;
+                    
+                    if (!empty($serviceOnlyStats)): ?>
+                        <?php foreach ($serviceOnlyStats as $svc): 
+                            $serviceOnlyTotalCount += (int)$svc['total_count'];
+                            ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($svc['service_name']); ?></td>
                                 <td><?php echo number_format($svc['total_count']); ?></td>
@@ -669,6 +723,12 @@ $conn->close();
                         </tr>
                     <?php endif; ?>
                 </tbody>
+                <tfoot>
+                    <tr style="background-color: #f8f9fa; font-weight: bold;">
+                        <td>Total</td>
+                        <td><?php echo number_format($serviceOnlyTotalCount); ?></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
@@ -692,6 +752,50 @@ $conn->close();
                     <?php else: ?>
                         <tr>
                             <td colspan="2" style="text-align: center;">No inventory data available for this period</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>Expenses</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Expense Name</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    // Debug: Check if we have any expenses
+                    if (empty($expenses)) {
+                        error_log("No expenses found for period $startDate to $endDate");
+                    } else {
+                        error_log("Found " . count($expenses) . " expenses for period $startDate to $endDate");
+                    }
+                    ?>
+                    <?php if (!empty($expenses)): ?>
+                        <?php foreach ($expenses as $expense): ?>
+                            <tr>
+                                <td><?php echo date('M d, Y', strtotime($expense['expense_date'])); ?></td>
+                                <td><?php echo htmlspecialchars($expense['expense_name']); ?></td>
+                                <td><?php echo htmlspecialchars($expense['description'] ?: '-'); ?></td>
+                                <td>₱<?php echo number_format((float)$expense['amount'], 2); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr style="background-color: #f8f9fa; font-weight: bold;">
+                            <td colspan="3" style="text-align: right;">Total Expenses:</td>
+                            <td>₱<?php echo number_format($totalExpenses, 2); ?></td>
+                        </tr>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #e74c3c;">
+                                No expenses recorded for this period (<?php echo date('M d, Y', strtotime($startDate)); ?> to <?php echo date('M d, Y', strtotime($endDate)); ?>)
+                            </td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
