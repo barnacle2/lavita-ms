@@ -6,6 +6,12 @@
 
 // Check if user is logged in and is an admin
 $isAdmin = isset($_SESSION['loggedin']) && $_SESSION['role'] === 'admin';
+
+// Completely block staff/cashier from accessing this page
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'staff') {
+    header('Location: index.php?page=dashboard');
+    exit();
+}
 $blurStyle = $isAdmin ? '' : 'style="filter: blur(5px); pointer-events: none;"';
 $accessDenied = !$isAdmin;
 

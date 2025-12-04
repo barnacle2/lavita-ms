@@ -35,12 +35,23 @@ $themeClass = ($appTheme === 'dark') ? 'theme-dark' : 'theme-default';
 // Get the current page from the URL. Defaults to 'dashboard'.
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 
+// Determine user role (used for access control and sidebar visibility)
+$currentUserRole = $_SESSION['role'] ?? '';
+
 // Check if the user is logged in
 // We only redirect to login if the user is not logged in AND the current page is NOT 'login'
 // This allows the login form to be processed when it's submitted.
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     if ($page != 'login') {
         $page = 'login';
+    }
+}
+
+// If the logged-in user is a staff/cashier, block access to certain pages
+if ($currentUserRole === 'staff') {
+    $restrictedPagesForStaff = ['services', 'inventory', 'analytics', 'settings_users'];
+    if (in_array($page, $restrictedPagesForStaff, true)) {
+        $page = 'dashboard';
     }
 }
 
@@ -241,42 +252,50 @@ if ($page === 'patients' && isset($_GET['patient_txn'])) {
                         </a>
                     </li>
 
+                    <?php if ($currentUserRole !== 'staff'): ?>
                     <li class="<?php echo ($page == 'services') ? 'active' : ''; ?>">
                         <a href="?page=services">
                             <i class="fas fa-hand-holding-medical"></i> Services
                         </a>
                     </li>
+                    <?php endif; ?>
                     <li class="<?php echo ($page == 'transactions') ? 'active' : ''; ?>">
                         <a href="?page=transactions">
                             <i class="fas fa-file-invoice-dollar"></i> Billing
                         </a>
                     </li>
+                    <?php if ($currentUserRole !== 'staff'): ?>
                     <li class="<?php echo ($page == 'inventory') ? 'active' : ''; ?>">
                         <a href="?page=inventory">
                             <i class="fas fa-boxes"></i> Inventory
                         </a>
                     </li>
+                    <?php endif; ?>
                     <li class="<?php echo ($page == 'expenses') ? 'active' : ''; ?>">
                         <a href="?page=expenses">
                             <i class="fas fa-receipt"></i> Expenses
                         </a>
                     </li>
+                    <?php if ($currentUserRole !== 'staff'): ?>
                     <li class="<?php echo ($page == 'analytics') ? 'active' : ''; ?>">
                         <a href="?page=analytics">
                             <i class="fas fa-chart-line"></i> Reports
                         </a>
                     </li>
+                    <?php endif; ?>
                     <li class="nav-header">SETTINGS</li>
                     <li class="<?php echo ($page == 'settings_clinic') ? 'active' : ''; ?>">
                         <a href="?page=settings_clinic">
                             <i class="fas fa-hospital"></i> Clinic Details
                         </a>
                     </li>
+                    <?php if ($currentUserRole !== 'staff'): ?>
                     <li class="<?php echo ($page == 'settings_users') ? 'active' : ''; ?>">
                         <a href="?page=settings_users">
                             <i class="fas fa-user-cog"></i> User Management
                         </a>
                     </li>
+                    <?php endif; ?>
                     <li class="<?php echo ($page == 'settings_system') ? 'active' : ''; ?>">
                         <a href="?page=settings_system">
                             <i class="fas fa-cogs"></i> System Configuration
