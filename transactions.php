@@ -252,7 +252,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $conn->commit();
-            $message = 'Transaction added successfully!';
+            // After successful insert, redirect so we can auto-open and scroll to this transaction in the list
+            header('Location: ?page=transactions&new_txn=' . (int)$transaction_id);
+            exit();
         } catch (mysqli_sql_exception $e) {
             $conn->rollback();
             $message = 'Error adding transaction: ' . $e->getMessage();
@@ -569,6 +571,17 @@ ORDER BY t.transaction_date DESC, t.transaction_id DESC
         font-size: 0.9rem;
         pointer-events: none;
     }
+
+    /* Temporary highlight for newly added transaction */
+    .highlight-new-transaction {
+        animation: highlightFade 4s ease-out;
+        background-color: #fff7cc !important;
+    }
+
+    @keyframes highlightFade {
+        0% { background-color: #ffe58f; }
+        100% { background-color: transparent; }
+    }
 </style>
 <div class="content transactions-page">
     <div class="card">
@@ -698,7 +711,7 @@ ORDER BY t.transaction_date DESC, t.transaction_id DESC
                     <tbody>
                         <?php if ($result->num_rows > 0): ?>
                             <?php while($row = $result->fetch_assoc()): ?>
-                                <tr>
+                                <tr data-txn-id="<?php echo htmlspecialchars($row['transaction_id']); ?>">
                                     <td><?php echo htmlspecialchars($row['transaction_id']); ?></td>
                                     <td><?php echo htmlspecialchars($row['fullname']); ?></td>
                                     <td><?php echo htmlspecialchars(date('F j, Y', strtotime($row['transaction_date']))); ?></td>
@@ -940,5 +953,29 @@ function filterTransactionsTable() {
 }
 
     // Initial call to set total on page load if editing
-    document.addEventListener('DOMContentLoaded', updateTotal);
+    document.addEventListener('DOMContentLoaded', function () {
+        updateTotal();
+
+        // Auto-open list and scroll to newly created transaction (if any)
+        const params = new URLSearchParams(window.location.search);
+        const newTxnId = params.get('new_txn');
+        if (!newTxnId) return;
+
+        const container = document.getElementById('transactions-list-container');
+        const button = document.getElementById('toggleListBtn');
+
+        if (container && (container.style.display === 'none' || container.style.display === '')) {
+            container.style.display = 'block';
+            if (button) button.textContent = 'Hide Transactions List';
+        }
+
+        setTimeout(function () {
+            const selector = 'tr[data-txn-id="' + CSS.escape(newTxnId) + '"]';
+            const row = document.querySelector(selector);
+            if (row) {
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                row.classList.add('highlight-new-transaction');
+            }
+        }, 200);
+    });
 </script>

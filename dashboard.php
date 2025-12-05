@@ -56,8 +56,6 @@ $default_threshold = 10; // Default threshold for unlisted unit types
 // including any per-item custom low_stock_threshold values.
 $inventoryCheckResult = $conn->query("SELECT item_name, stock_quantity, unit_type, low_stock_threshold FROM inventory");
 $lowStockItemsCount = 0; // Count of low stock items based on unit-specific thresholds
-$criticalItemsCount = 0; // Count of items below the fixed critical threshold
-$criticalThreshold = 10;
 $lowStockItems = [];      // Detailed list for the dashboard card
 
 if ($inventoryCheckResult) {
@@ -78,14 +76,13 @@ if ($inventoryCheckResult) {
                 'stock_quantity' => $row['stock_quantity']
             ];
         }
-
-        // 2. Critical Stock Check (Fixed <10 for the Critical Card)
-        if ($row['stock_quantity'] < $criticalThreshold) {
-            $criticalItemsCount++;
-        }
     }
 }
 
+
+// Critical stock metric mirrors the low-stock items count so it reflects
+// the same equipment shown in the Low Stock Inventory list.
+$criticalItemsCount = $lowStockItemsCount;
 
 // --- 3. Revenue / Billing Summary ---
 // Today's Earnings (Total amount from transactions today)
